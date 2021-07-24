@@ -45,7 +45,7 @@ export default function MoviesPage() {
         <button type="submit">Search</button>
       </form>
 
-      <MoviesList movies={searchMovies} />
+      <MoviesList movies={searchMovies} searchParams={location} />
     </>
   );
 }

@@ -1,5 +1,12 @@
-import { Link, useParams, useRouteMatch, Route } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import {
+  Link,
+  useParams,
+  useRouteMatch,
+  Route,
+  useLocation,
+  useHistory,
+} from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react';
 import Cast from '../../Cast/Cast';
 import Reviews from '../../Reviews/Reviews';
 import fetchMovie from '../../API/fetchMovie';
@@ -9,13 +16,38 @@ export default function MovieDetailsPage() {
   const { movieId } = useParams();
   const [movie, setMovie] = useState(null);
   const { url, path } = useRouteMatch();
+  const location = useLocation();
+  const history = useHistory();
+
+  const search = useRef(null);
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRender.current === true) {
+      if (!search.current) {
+        search.current = location.state?.params;
+      }
+    }
+    isFirstRender.current = false;
+  });
 
   useEffect(() => {
     fetchMovie(movieId).then(r => setMovie(r));
   }, [movieId]);
 
+  const onBtnClick = () => {
+    if (search.current?.search) {
+      history.push(`${search.current.pathname}${search.current?.search}`);
+    }
+    history.push('/');
+  };
+
   return (
-    <>
+    <div>
+      <button type="button" onClick={onBtnClick}>
+        GO BACK
+      </button>
+
       {movie && (
         <div>
           <ThumbMovieInfo>
@@ -39,7 +71,13 @@ export default function MovieDetailsPage() {
 
           <ThumbInformation>
             <h3>Additional Information:</h3>
-            <Link to={`${url}/cast`}>Cast</Link>
+            <Link
+              to={{
+                pathname: `${url}/cast`,
+              }}
+            >
+              Cast
+            </Link>
             <Link to={`${url}/reviews`}>Reviews</Link>
           </ThumbInformation>
 
@@ -52,6 +90,6 @@ export default function MovieDetailsPage() {
           </Route>
         </div>
       )}
-    </>
+    </div>
   );
 }
