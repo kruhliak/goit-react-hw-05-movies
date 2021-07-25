@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import MoviesList from '../MoviesList/MoviesList';
 
-function HomeView() {
+export default function HomePage() {
   const [trendingMovies, setTrendingMovies] = useState([]);
 
   useEffect(() => {
@@ -22,5 +22,3 @@ function HomeView() {
     </div>
   );
 }
-
-export default HomeView;

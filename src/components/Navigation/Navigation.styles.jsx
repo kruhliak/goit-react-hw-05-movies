@@ -19,7 +19,7 @@ export const StyledNavLink = styled(NavLink)`
   }
 
   &.activeLink {
-    color: #2196f3;
+    color: #f39f21;
   }
 `;
 
